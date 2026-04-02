@@ -76,7 +76,7 @@
       font-size: 14px;
     }
 
-    input[type="text"],
+    .text-input,
     textarea {
       width: 100%;
       padding: 12px;
@@ -87,7 +87,7 @@
       transition: border-color 0.3s;
     }
 
-    input[type="text"]:focus,
+    .text-input:focus,
     textarea:focus {
       outline: none;
       border-color: #667eea;
@@ -167,11 +167,11 @@
       <h2>Encrypt</h2>
       <div class="input-group">
         <label for="uid">X-UID:</label>
-        <input type="text" id="uid" placeholder="my_uid">
+        <input type="text" id="uid" placeholder="my_uid" class="text-input">
       </div>
       <div class="input-group">
         <label for="requestId">Request ID:</label>
-        <input type="text" id="requestId" value="req_12345" placeholder="req_12345">
+        <input type="text" id="requestId" value="req_12345" placeholder="req_12345" class="text-input">
       </div>
       <div class="button-group">
         <button id="encryptBtn">Encrypt</button>
