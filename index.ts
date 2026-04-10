@@ -1,4 +1,4 @@
-import { createHash } from "crypto";
+import { randomBytes, createCipheriv, createDecipheriv, createHash } from "crypto";
 
 function deriveAesKey(
   request_id: string,
@@ -37,8 +37,6 @@ function buildAad(
   const aad_string = `${request_id}|${timestamp}|${nonce_hex}`;
   return Buffer.from(aad_string, "utf8");
 }
-
-import { randomBytes, createCipheriv, createDecipheriv } from "crypto";
 
 interface Packet {
   ["x-version"]: string;
@@ -125,7 +123,11 @@ function decrypt(packet: Packet): unknown {
   );
 
   // Step 5 — rebuild AAD
-  const aad = buildAad(packet["x-rid"], packet["x-timestamp"], packet["x-nonce"]);
+  const aad = buildAad(
+    packet["x-rid"],
+    packet["x-timestamp"],
+    packet["x-nonce"],
+  );
 
   // Step 6 — decrypt and verify
   const decipher = createDecipheriv("aes-256-gcm", aes_key, iv_bytes);
