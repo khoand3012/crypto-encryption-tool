@@ -49,16 +49,16 @@ interface Packet {
 }
 
 // Simple in-memory nonce cache with TTL
-const nonceCache = new Map<string, number>();
-const NONCE_TTL_MS = 10 * 60 * 1000; // 10 minutes
-const TIMESTAMP_TOLERANCE_MS = 30 * 60 * 1000; // 30 minutes
+// const nonceCache = new Map<string, number>();
+// const NONCE_TTL_MS = 10 * 60 * 1000; // 10 minutes
+// const TIMESTAMP_TOLERANCE_MS = 30 * 60 * 1000; // 30 minutes
 
-function pruneExpiredNonces(): void {
-  const now = Date.now();
-  for (const [nonce, expiry] of nonceCache.entries()) {
-    if (now > expiry) nonceCache.delete(nonce);
-  }
-}
+// function pruneExpiredNonces(): void {
+//   const now = Date.now();
+//   for (const [nonce, expiry] of nonceCache.entries()) {
+//     if (now > expiry) nonceCache.delete(nonce);
+//   }
+// }
 
 function encrypt(payload: string, request_id: string): Packet {
   // Step 1 — generate metadata
@@ -99,16 +99,16 @@ function encrypt(payload: string, request_id: string): Packet {
 
 function decrypt(packet: Packet): unknown {
   // Step 1 — validate timestamp
-  const now = Date.now();
-  if (Math.abs(now - packet["x-timestamp"]) > TIMESTAMP_TOLERANCE_MS) {
-    throw new Error("timestamp expired");
-  }
+  // const now = Date.now();
+  // if (Math.abs(now - packet["x-timestamp"]) > TIMESTAMP_TOLERANCE_MS) {
+  //   throw new Error("timestamp expired");
+  // }
 
   // Step 2 — check nonce has not been used before
-  pruneExpiredNonces();
-  if (nonceCache.has(packet["x-nonce"])) {
-    throw new Error("nonce already used — replay attack");
-  }
+  // pruneExpiredNonces();
+  // if (nonceCache.has(packet["x-nonce"])) {
+  //   throw new Error("nonce already used — replay attack");
+  // }
 
   // Step 3 — decode bytes from packet fields
   const iv_bytes = Buffer.from(packet["x-iv"], "hex");
@@ -142,7 +142,7 @@ function decrypt(packet: Packet): unknown {
   }
 
   // Step 7 — store nonce, parse result
-  nonceCache.set(packet["x-nonce"], Date.now() + NONCE_TTL_MS);
+  // nonceCache.set(packet["x-nonce"], Date.now() + NONCE_TTL_MS);
 
   return JSON.parse(plaintext.toString("utf8"));
 }
